@@ -9,6 +9,7 @@ import {
   getTodoError,
   removeTodo,
   editTask,
+  statuschange,
 } from "../todofeature/action";
 
 function Todo() {
@@ -16,6 +17,7 @@ function Todo() {
   const [edit, setEdit] = useState(false);
   const [updatedtext, setUpdatedText] = useState("");
   const [updateid, setUpdateID] = useState(-1);
+  const [updatestatus, setUpdateStatus] = useState("Completed")
   const { loading, todos, error } = useSelector((state) => ({
     loading: state.loading,
     todos: state.todo,
@@ -49,6 +51,9 @@ function Todo() {
     setEdit(true);
     setUpdateID(id);
   };
+  const handlestatus = (id) =>{
+       dispatch(statuschange(id, updatestatus))
+  }
 
   return (
     <div>
@@ -74,7 +79,7 @@ function Todo() {
           {todos.map((e) => (
             <tr key={e.ids}>
               <td>{e.text}</td>
-              {e.status == "Completed" ? <td>Done</td> : <td>Not done</td> }
+              {e.status == "Completed" ? <td>Done</td> : <td onClick = {() => handlestatus(e.ids)}>Not done</td> }
                 
               <td onClick={() => handleedited(e.ids)}><button style={{color:"blue",border:"none", background: "white", fontSize:"17px"}}>Edit</button></td>
               <td onClick={() => handleDelete(e.ids)}>
